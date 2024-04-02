@@ -1,11 +1,15 @@
 from Functions import *
 import streamlit as st
 
+from Functions import *
+from Functions import check_login, check_repeat
+
+
 def login():
+
     if "disabled" not in st.session_state:
         st.session_state["disabled"] = False
 
-    placeholder = st.empty()
     col1, col2, col3 = st.columns(3)
     with col1:
         st.write('')
@@ -21,7 +25,7 @@ def login():
 
         st.markdown("<h1 style='text-align: left; color: black; font-size: 30px'> Login: </h1>", unsafe_allow_html=True)
 
-        userName = st.text_input('Username: ', disabled=st.session_state.disabled)
+        userName = st.text_input('Email: ', disabled=st.session_state.disabled)
         password = st.text_input('Password: ', disabled=st.session_state.disabled)
 
         if st.button('Submit'):
@@ -36,6 +40,7 @@ def login():
                 elif check_login(userName, password) == '1':
                     st.write("Username and/or Password are incorrect")
                 else:
+                    fname, lname = check_login(userName, password)
                     st.session_state["logged in"] = True
                     #st.write("Welcome back: " + check_login(userName, password))
 
@@ -46,8 +51,9 @@ def login():
 
         st.markdown("<h1 style='text-align: left; color: black; font-size: 30px'> Personal Information: </h1>",
                     unsafe_allow_html=True)
-        Name = st.text_input('Full name: ')
-        userName = st.text_input('Create Username: ')
+        firstName = st.text_input('First Name: ')
+        lastName = st.text_input('Last Name: ')
+        userName = st.text_input('Email: ')
         password = st.text_input('Create Password: ')
         password2 = st.text_input("Re-enter Password")
         st.markdown("<h1 style='text-align: left; color: black; font-size: 30px'> Security Questions: </h1>",
@@ -60,13 +66,31 @@ def login():
         q3 = st.text_input("What is your favorite sport")
 
         if st.button('Register'):
-            print("Registered Info")
+            check_repeat(userName)
+            if lastName == "" or firstName == "" or password == "":
+                st.write("User Information cannot be blank")
+            elif q1 == "" or q2 == "" or q3 == "":
+                st.write("User Questions cannot be blank")
+            elif password != password2:
+                st.write("Passwords do not match")
+            else:
+                print("Registered Info")
+                if check_repeat(userName) == False:
+                    st.write("Email already taken")
+                elif check_repeat(userName) == True:
+                    #st.write("F: Email not taken")
+                    add_to_database(firstName, lastName, userName, password, q1, q2, q3)
+                    st.write("User has been added to database")
 
 
 
     if choice == "Forgot Password":
 
         st.markdown("<h1 style='text-align: center; color: black;'> Forgot Password </h1>", unsafe_allow_html=True)
+
+        st.markdown("<h1 style='text-align: left; color: black; font-size: 30px'> User Information: </h1>",
+                    unsafe_allow_html=True)
+        email = st.text_input("What is your email login?")
 
         st.markdown("<h1 style='text-align: left; color: black; font-size: 30px'> Security Questions: </h1>",
                     unsafe_allow_html=True)
@@ -84,7 +108,8 @@ def login():
         password2 = st.text_input("Re-enter Password")
 
         if st.button('Submit'):
-            st.write("New Password")
+            # st.write("New Password")
+            forgotPassword(email, q1, q2, q3, password, password2)
 
 
 
