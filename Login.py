@@ -18,7 +18,7 @@ def login():
     with col3:
         st.write('')
 
-    menu = ['Login', 'New User', 'Forgot Password']
+    menu = ['Login', 'New User']
     choice = st.selectbox("Select a Login Option", menu, disabled=st.session_state.disabled)
 
     if choice == 'Login':
@@ -82,34 +82,6 @@ def login():
                     add_to_database(firstName, lastName, userName, password, q1, q2, q3)
                     st.write("User has been added to database")
 
-
-
-    if choice == "Forgot Password":
-
-        st.markdown("<h1 style='text-align: center; color: black;'> Forgot Password </h1>", unsafe_allow_html=True)
-
-        st.markdown("<h1 style='text-align: left; color: black; font-size: 30px'> User Information: </h1>",
-                    unsafe_allow_html=True)
-        email = st.text_input("What is your email login?")
-
-        st.markdown("<h1 style='text-align: left; color: black; font-size: 30px'> Security Questions: </h1>",
-                    unsafe_allow_html=True)
-
-        st.write("Security Question 1:")
-        q1 = st.text_input("What is your favorite animal?")
-        st.write("Security Question 2:")
-        q2 = st.text_input("What is your favorite dessert?")
-        st.write("Security Question 3:")
-        q3 = st.text_input("What is your favorite sport")
-
-        st.markdown("<h1 style='text-align: left; color: black; font-size: 30px'> Set New Password: </h1>",
-                    unsafe_allow_html=True)
-        password = st.text_input('New Password: ')
-        password2 = st.text_input("Re-enter Password")
-
-        if st.button('Submit'):
-            # st.write("New Password")
-            forgotPassword(email, q1, q2, q3, password, password2)
 
 
 

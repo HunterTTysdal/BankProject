@@ -1,7 +1,6 @@
 import mysql.connector
 from Login import *
 import streamlit as st
-from pydantic import BaseModel
 
 # To Do
 # Disable Login option upon successful login
@@ -10,10 +9,7 @@ from pydantic import BaseModel
 # in function add connection to sql and add functions to check inputs for login
 # recreate tables in sql database to match inputs of front end
 
-class User(BaseModel):
-    email = str
-    fname = str
-    lname = str
+
 
 connection = mysql.connector.connect(
     host='localhost',
