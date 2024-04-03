@@ -1,0 +1,37 @@
+Table Creation Queries:
+
+CREATE DATABASE bank_data;
+
+CREATE TABLE user_info (
+fName varchar(40),
+lName varchar(40),
+email varchar(40),
+pword varchar(40),
+a1 varchar(20),
+a2 varchar(20),
+a3 varchar(20)
+);
+
+
+CREATE TABLE user_transactions(
+email VARCHAR(40),
+category VARCHAR(20),
+amount int(15)
+);
+
+
+Sample Queries
+
+INSERT INTO user_info (fName, lName, email, pword,a1, a2, a3)
+VALUES ('Craig', 'Austin', 'cAustin@gmail.com', 'asdfmovies', 
+'goldfish', 'celeery', 'baseball'),
+('Cassidy', 'Johnson', 'cJohnson@yahoo.com', 'maplecorg', 
+'dog', 'pie', 'football'),
+('Kevin', 'Conroy', 'iamBatman@gmail.com', 'darkknight123', 
+'cat', 'cake', 'soccer');
+
+
+INSERT INTO user_transactions(email, category, amount)
+Values ('iamBatman@gmail.com', 'Misc', 200),
+('cAustin@gmail.com', 'Groceries', 150),
+('cAustin@gmail.com', 'Transportation', 300);
