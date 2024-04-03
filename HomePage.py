@@ -1,6 +1,7 @@
 from Functions import *
 import streamlit as st
 import pandas as pd
+from math import pow
 
 
 def homePage():
@@ -89,9 +90,9 @@ def homePage():
     if add_select == "Loan Calculator":
         st.markdown("<h1 style='text-align: center; color: black; font-size: 40px'> Loan Calculator </h1>", unsafe_allow_html=True)
 
-        loan_amount = st.text_input("Loan Amount: ")
-        length = st.text_input("Loan Term (in years)")
-        interest = st.text_input("Interest Rate")
+        loan_amount = (st.text_input("Loan Amount: "))
+        length = (st.text_input("Loan Term (in years)"))
+        interest = (st.text_input("Interest Rate"))
         options = ['Monthly', 'Quarterly', 'Yearly']
         compound = st.selectbox("Compound", options)
 
@@ -109,10 +110,18 @@ def homePage():
                 st.write("Amounts cannot be less than or equal to 0")
             else:
                 cost = 0
+                n = 0
                 if compound == 'Monthly':
-                    cost = float(loan_amount) * (1 + (float(interest) / 12)) ** (12 * float(length))
+                    n = 12
                 elif compound == 'Quarterly':
-                    cost = float(loan_amount) * (1 + (float(interest) / 4)) ** (4 * float(length))
+                    n = 4
                 elif compound == 'Yearly':
-                    cost = float(loan_amount) * (1 + (float(interest) / 1)) ** (1 * float(length))
+                    n = 1
+
+                cost = float(loan_amount) * pow((1 + ((float(interest)/100) / n)), (n * float(length)))
+
                 st.write("Total cost after " + str(length) + " years would be: $" + "{:.2f}".format(cost))
+                interestG = cost - float(loan_amount)
+                st.write("$" + "{:.2f}".format(interestG) + " would be the interest gained over the span of the loan")
+
+# final = P * (((1 + (r/n)) ** (n*t)))
