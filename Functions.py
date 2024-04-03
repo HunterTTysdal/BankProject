@@ -58,5 +58,25 @@ def add_to_database(first, last, email, password, a1, a2, a3):
     record = (first, last, email, password, a1, a2, a3)
     mycursor.execute(query, record)
     connection.commit()
+def addTransaction(email, cat, amount):
+    mycursor = connection.cursor()
+    query = ("INSERT INTO user_transactions(email, category, amount)"
+             "VALUES(%s, %s, %s)")
+    record = (email, cat, amount)
+    mycursor.execute(query, record)
+    connection.commit()
+def getUser(email):
+    print('hi')
 
+def getLists(email):
+    categories = []
+    amounts = []
+    mycursor = connection.cursor()
+    mycursor.execute("SELECT * FROM user_transactions")
+    users = mycursor.fetchall()
 
+    for i in range(len(users)):
+        if users[i][0] == email:
+            categories.append(users[i][1])
+            amounts.append(users[i][2])
+    return categories, amounts

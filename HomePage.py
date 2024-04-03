@@ -1,5 +1,6 @@
 from Functions import *
 import streamlit as st
+import pandas as pd
 
 
 def homePage():
@@ -31,6 +32,8 @@ def homePage():
     if add_select == "Add Transactions":
         st.markdown("<h1 style='text-align: center; color: black; font-size: 40px'> Add Transactions </h1>", unsafe_allow_html=True)
 
+        email = st.text_input("Enter Email: ")
+
         menu = ['--', 'Utilities', 'Groceries', 'Transportations', 'Subscriptions', 'Misc']
         trans = st.selectbox("What is the category of transaction", menu)
 
@@ -44,6 +47,8 @@ def homePage():
                 flag = True
             if flag:
                 st.write('Input must be a number')
+            elif check_repeat(email) == True:
+                st.write("Incorrect Email")
             elif trans == '--':
                 st.write("Category cannot be blank")
             elif amount == '':
@@ -52,10 +57,62 @@ def homePage():
                 st.write("Amount cannot be negative")
             else:
                 st.write("Transaction accepted and added to transaction history")
+                addTransaction(email, trans, amount)
 
     if add_select == "View Transactions":
         st.markdown("<h1 style='text-align: center; color: black; font-size: 40px'> View Transactions </h1>", unsafe_allow_html=True)
+        st.write("Enter email and hit enter to view transaction history")
+        email = st.text_input("Email: ")
+        if st.button("Enter"):
+            if check_repeat(email) == True:
+                st.write("Incorrect Email")
+            else:
+                cats = []
+                amounts = []
+                cats, amounts = getLists(email)
+                df = pd.DataFrame(
+                    {
+                        "categories": cats,
+                        "amounts": amounts
+                    }
+                )
+                st.dataframe(
+                    df,
+                    column_config={
+                        "categories": "Categories",
+                        "amounts": "Amounts"
+                    },
+                    hide_index=True,
+                )
+
 
     if add_select == "Loan Calculator":
         st.markdown("<h1 style='text-align: center; color: black; font-size: 40px'> Loan Calculator </h1>", unsafe_allow_html=True)
 
+        loan_amount = st.text_input("Loan Amount: ")
+        length = st.text_input("Loan Term (in years)")
+        interest = st.text_input("Interest Rate")
+        options = ['Monthly', 'Quarterly', 'Yearly']
+        compound = st.selectbox("Compound", options)
+
+        if st.button("Enter"):
+            flag = False
+            try:
+                float(loan_amount)
+                float(length)
+                float(interest)
+            except ValueError:
+                flag = True
+            if flag:
+                st.write('Inputs must be a number')
+            elif float(loan_amount) <= 0 or float(length) <= 0 or float(interest) <= 0:
+                st.write("Amounts cannot be less than or equal to 0")
+            else:
+                cost = 0
+                if compound == 'Monthly':
+                    cost = float(loan_amount) * (1 + (float(interest) / 12)) ** (12 * float(length))
+                elif compound == 'Quarterly':
+                    cost = float(loan_amount) * (1 + (float(interest) / 4)) ** (4 * float(length))
+                elif compound == 'Yearly':
+                    cost = float(loan_amount) * (1 + (float(interest) / 1)) ** (1 * float(length))
+                st.write("Total cost after " + str(length) + " years would be: $" + "{:.2f}".format(cost))
