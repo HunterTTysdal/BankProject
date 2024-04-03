@@ -59,31 +59,4 @@ def add_to_database(first, last, email, password, a1, a2, a3):
     mycursor.execute(query, record)
     connection.commit()
 
-def forgotPassword(email, a1, a2, a3, password, password2):
-    mycursor = connection.cursor()
-    mycursor.execute("SELECT * FROM user_info")
-    users = mycursor.fetchall()
 
-    for i in range(len(users)):
-        if users[i][2] == email:
-            if users[i][4] == a1 and users[i][5] == a2 and users[i][6] == a3:
-                if password == password2:
-                    changePassword(password, email)
-                    st.write("Password has been changed")
-                    return True
-                else:
-                    st.write("Passwords do not match")
-            else:
-                st.write("Security Questions do not match")
-
-        elif i == len(users) - 1 and users[i][2] != email:
-            st.write("Email not found")
-            return False
-def changePassword(newPword, email):
-    mycursor = connection.cursor()
-    query = ("UPDATE user_info"
-             "SET pword = %s "
-             "WHERE email = %s")
-    record = (newPword, email)
-    mycursor.execute(query, record)
-    connection.commit()

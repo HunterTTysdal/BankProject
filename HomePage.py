@@ -3,6 +3,7 @@ import streamlit as st
 
 
 def homePage():
+
     if st.button("Log Out"):
         for key in st.session_state.keys():
             del st.session_state[key]
@@ -29,6 +30,28 @@ def homePage():
 
     if add_select == "Add Transactions":
         st.markdown("<h1 style='text-align: center; color: black; font-size: 40px'> Add Transactions </h1>", unsafe_allow_html=True)
+
+        menu = ['--', 'Utilities', 'Groceries', 'Transportations', 'Subscriptions', 'Misc']
+        trans = st.selectbox("What is the category of transaction", menu)
+
+        amount = st.text_input('Amount: ')
+
+        if st.button("Submit"):
+            flag = False
+            try:
+                int(amount)
+            except ValueError:
+                flag = True
+            if flag:
+                st.write('Input must be a number')
+            elif trans == '--':
+                st.write("Category cannot be blank")
+            elif amount == '':
+                st.write("Amount cannot be blank")
+            elif int(amount) < 0:
+                st.write("Amount cannot be negative")
+            else:
+                st.write("Transaction accepted and added to transaction history")
 
     if add_select == "View Transactions":
         st.markdown("<h1 style='text-align: center; color: black; font-size: 40px'> View Transactions </h1>", unsafe_allow_html=True)
